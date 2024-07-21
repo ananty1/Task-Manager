@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "task-manager-app": "file:.."
+  }
+}

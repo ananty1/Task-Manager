@@ -1,0 +1,50 @@
+.navbar{
+  position: sticky;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgb(52, 52, 220);
+  box-shadow: 0 4px 6px rgba(199, 154, 154, 0.1);
+}
+
+.navbar-left{
+  margin-left: 10%;
+}
+.navbar-left .calender-icon img{
+  height: 40px;
+  width: 40px;
+  /* background-color: white; */
+ 
+  
+}
+
+.navbar-right{
+  margin-right: 10%;
+  margin-bottom: 0.8rem;
+}
+.navbar-right .credentials{
+  display: flex;
+  flex-direction: row;
+  
+  
+}
+
+.navbar-right .logout button{
+  background-color: rgb(219, 61, 68);
+  padding: 1.2em 2em;
+ 
+  color: rgb(219, 215, 215);
+}
+
+.navbar-right .credentials button{
+  background-color: #007bff;
+  margin-right: 0.8rem;
+  color: rgb(236, 230, 230);
+  padding: 1.2em 2em;
+}
+
+.navbar-right .credentials button:hover{
+  background-color: rgb(232, 232, 243);
+  color: rgb(183, 161, 161);
+  padding: 1em 2em;
+}
