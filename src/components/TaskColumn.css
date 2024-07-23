@@ -1,0 +1,11 @@
+/* src/components/TaskColumn.css */
+.task-column {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  .task-column h2 {
+    text-align: center;
+  }
+  

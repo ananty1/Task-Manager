@@ -1,0 +1,11 @@
+/* src/components/TaskList.css */
+.task-list {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
+  }
+  
+  .task-column {
+    width: 30%;
+  }
+  
