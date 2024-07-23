@@ -1,0 +1,19 @@
+/* src/components/TaskColumn.css */
+.task-column {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(4, 2, 2, 0.1);
+  }
+  
+  .column-header {
+    background-color: rgb(71, 96, 237);
+    
+  }
+  .column-header h2{
+    margin: 2% 2%;
+    color: white;
+    padding: 10px;
+    
+  }
+  
