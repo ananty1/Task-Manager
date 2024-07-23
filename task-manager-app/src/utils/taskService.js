@@ -1,5 +1,6 @@
 // services/taskService.js
-const API_URL = 'http://localhost:5000/api/tasks';
+// const API_URL = 'http://localhost:5000/api/tasks';
+const API_URL = `${process.env.REACT_APP_BACKEND_URL}/tasks`;
 
 export const getTasks = async () => {
   const response = await fetch(API_URL);
