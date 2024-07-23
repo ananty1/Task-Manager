@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const Task = require('../models/Task');
 
+
 // Get all tasks
 router.get('/', async (req, res) => {
   const tasks = await Task.find();
@@ -11,10 +12,15 @@ router.get('/', async (req, res) => {
 
 // Create a new task
 router.post('/', async (req, res) => {
-  const newTask = new Task(req.body);
-  await newTask.save();
-  res.status(201).json(newTask);
+  try {
+    const newTask = new Task(req.body);
+    await newTask.save();
+    res.status(201).json(newTask);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to create task' });
+  }
 });
+
 
 // Update a task
 router.put('/:id', async (req, res) => {

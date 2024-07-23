@@ -15,7 +15,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/tasks', taskRoutes);
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/taskmanager', {
+mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => {

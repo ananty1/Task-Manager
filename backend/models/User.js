@@ -19,6 +19,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    googleId:{
+        type:String,
+    }
 });
 
 userSchema.pre('save', async function (next) {
