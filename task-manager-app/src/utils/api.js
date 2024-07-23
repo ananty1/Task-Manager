@@ -20,3 +20,7 @@ export const signupUser = async (user) => {
     throw new Error(error.response?.data?.message || 'Signup request failed');
   }
 };
+export const googleLoginUser = async (token) => {
+  const response = await axios.post(`${API_URL}/users/google-login`, { token });
+  return response.data;
+};

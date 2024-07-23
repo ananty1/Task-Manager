@@ -1,15 +1,18 @@
+// src/components/TaskList.js
 import React, { useEffect, useState } from 'react';
 import TaskColumn from './TaskColumn';
 import { getTasks, createTask, updateTask, deleteTask } from '../utils/taskService.js';
 import './TaskList.css';
+import { useNavigate } from 'react-router-dom';
 
 const TaskList = () => {
   const [tasklist, setTaskList] = useState({
-    "Pending": [
-    ],
+    "Pending": [],
     "InProgress": [],
     "Completed": []
   });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -19,8 +22,6 @@ const TaskList = () => {
         return acc;
       }, { "Pending": [], "InProgress": [], "Completed": [] });
       setTaskList(categorizedTasks);
-    
-
     };
 
     fetchTasks();
@@ -37,11 +38,11 @@ const TaskList = () => {
     const sourceColumn = e.dataTransfer.getData("column");
 
     if (sourceColumn !== targetColumn) {
-      const task = tasklist[sourceColumn].find(task => task.id === parseInt(id));
-      const updatedSourceColumn = tasklist[sourceColumn].filter(task => task.id !== parseInt(id));
+      const task = tasklist[sourceColumn].find(task => task._id === id);
+      const updatedSourceColumn = tasklist[sourceColumn].filter(task => task._id !== id);
       const updatedTask = { ...task, status: targetColumn };
-      await updateTask(task.id, updatedTask);
-      const updatedTargetColumn = [...tasklist[targetColumn], task];
+      await updateTask(id, updatedTask);
+      const updatedTargetColumn = [...tasklist[targetColumn], updatedTask];
 
       setTaskList({
         ...tasklist,
@@ -57,14 +58,12 @@ const TaskList = () => {
 
   const handleOnReorder = async (sourceId, targetId, column) => {
     const columnTasks = tasklist[column];
-    const sourceIndex = columnTasks.findIndex(task => task.id === sourceId);
-    const targetIndex = columnTasks.findIndex(task => task.id === targetId);
+    const sourceIndex = columnTasks.findIndex(task => task._id === sourceId);
+    const targetIndex = columnTasks.findIndex(task => task._id === targetId);
 
     const reorderedTasks = [...columnTasks];
     const [movedTask] = reorderedTasks.splice(sourceIndex, 1);
     reorderedTasks.splice(targetIndex, 0, movedTask);
-    
-    
 
     setTaskList({
       ...tasklist,
@@ -73,11 +72,11 @@ const TaskList = () => {
   };
 
   const handleSave = async (updatedTask) => {
-    await updateTask(updatedTask.id, updatedTask);
+    await updateTask(updatedTask._id, updatedTask);
     const updatedTaskList = { ...tasklist };
     Object.keys(updatedTaskList).forEach(column => {
       updatedTaskList[column] = updatedTaskList[column].map(task => 
-        task.id === updatedTask.id ? updatedTask : task
+        task._id === updatedTask._id ? updatedTask : task
       );
     });
     setTaskList(updatedTaskList);
@@ -86,29 +85,30 @@ const TaskList = () => {
   return (
     <div className='task-page'>
       <div className='add-task'>
-      <button>Add Task</button></div>
+        <button onClick={() => navigate("/create-task")}>Add Task</button>
+      </div>
       <div className='search-bar'>
         <div>
-           <strong>Search: </strong><input/>
+          <strong>Search: </strong><input/>
         </div>
         <div>
           <strong>Sort By: <select> Recent</select></strong>
         </div>
       </div>
-    <div className="task-list">
-      {Object.keys(tasklist).map(status => (
-        <TaskColumn
-          key={status}
-          status={status}
-          tasks={tasklist[status]}
-          handleOnDrag={handleOnDrag}
-          handleOnDrop={handleOnDrop}
-          handleOnDragOver={handleOnDragOver}
-          handleOnReorder={handleOnReorder}
-          handleSave={handleSave}
-        />
-      ))}
-    </div>
+      <div className="task-list">
+        {Object.keys(tasklist).map(status => (
+          <TaskColumn
+            key={status}
+            status={status}
+            tasks={tasklist[status]}
+            handleOnDrag={handleOnDrag}
+            handleOnDrop={handleOnDrop}
+            handleOnDragOver={handleOnDragOver}
+            handleOnReorder={handleOnReorder}
+            handleSave={handleSave}
+          />
+        ))}
+      </div>
     </div>
   );
 };

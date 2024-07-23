@@ -1,8 +1,9 @@
+// src/components/TaskColumn.js
 import React from 'react';
 import TaskCard from './TaskCard';
 import './TaskColumn.css';
 
-const TaskColumn = ({ tasks, status, handleOnDrag, handleOnDrop, handleOnDragOver, handleOnReorder,handleSave }) => {
+const TaskColumn = ({ tasks, status, handleOnDrag, handleOnDrop, handleOnDragOver, handleOnReorder, handleSave }) => {
   return (
     <div
       className="task-column"
@@ -10,12 +11,12 @@ const TaskColumn = ({ tasks, status, handleOnDrag, handleOnDrop, handleOnDragOve
       onDragOver={handleOnDragOver}
     >
       <div className='column-header'>
-      <h2>{status}</h2>
+        <h2>{status}</h2>
       </div>
-      {tasks.map((task, index) => (
+      {tasks.map((task) => (
         <TaskCard
-          key={task.id}
-          id={task.id}
+          key={task._id}
+          id={task._id}
           status={status}
           task={task}
           handleOnDrag={handleOnDrag}

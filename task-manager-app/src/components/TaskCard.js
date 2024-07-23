@@ -1,20 +1,20 @@
+// src/components/TaskCard.js
 import React, { useState } from 'react';
 import './TaskCard.css';
 import EditTask from './EditTask';
 import ViewDetail from './ViewDetail';
 
-
-const TaskCard = ({ id, status, task, handleOnDrag, handleOnReorder,handleSave }) => {
+const TaskCard = ({ id, status, task, handleOnDrag, handleOnReorder, handleSave }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isViewDetailsModalOpen, setIsViewDetailsModalOpen] = useState(false);
-  
+
   const handleDragOver = (e) => {
     e.preventDefault();
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
-    const sourceId = parseInt(e.dataTransfer.getData("id"));
+    const sourceId = e.dataTransfer.getData("id");
     if (sourceId !== id) {
       handleOnReorder(sourceId, id, status);
     }
@@ -49,7 +49,6 @@ const TaskCard = ({ id, status, task, handleOnDrag, handleOnReorder,handleSave }
         onRequestClose={() => setIsViewDetailsModalOpen(false)}
         task={task}
       />
-
     </div>
   );
 };

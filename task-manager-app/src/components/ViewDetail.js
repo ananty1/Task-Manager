@@ -1,5 +1,5 @@
 import React from 'react';
-import './Modal.css';
+import './Edit.css';
 
 const ViewDetail = ({ isOpen, onRequestClose, task }) => {
   if (!isOpen) return null;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Modal.css';
+import './Edit.css';
 
 const EditTask = ({ isOpen, onRequestClose, task, handleSave }) => {
   const [title, setTitle] = useState(task.title);

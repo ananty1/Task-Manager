@@ -7,12 +7,19 @@ export const getTasks = async () => {
 };
 
 export const createTask = async (task) => {
-  const response = await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(task),
-  });
-  return response.json();
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(task),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to create task');
+    }
+    return response.json();
+  } catch (error) {
+    throw error; // Re-throw to handle further up the call chain if needed
+  }
 };
 
 export const updateTask = async (id, updates) => {
