@@ -1,37 +1,77 @@
-// routes/tasks.js
 const express = require('express');
 const router = express.Router();
 const Task = require('../models/Task');
+const authMiddleware = require('../middleware/auth'); // Ensure this middleware extracts user ID from the token
 
-
-// Get all tasks
-router.get('/', async (req, res) => {
-  const tasks = await Task.find();
-  res.json(tasks);
-});
-
-// Create a new task
-router.post('/', async (req, res) => {
+// Get tasks for the authenticated user
+router.get('/', authMiddleware, async (req, res) => {
   try {
-    const newTask = new Task(req.body);
-    await newTask.save();
-    res.status(201).json(newTask);
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to create task' });
+    
+    const tasks = await Task.find({ userId: req.user._id });
+    
+    res.json(tasks);
+  } catch (err) {
+    res.status(500).send('Server error');
   }
 });
 
-
-// Update a task
-router.put('/:id', async (req, res) => {
-  const updatedTask = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  res.json(updatedTask);
+// Create a new task
+router.post('/', authMiddleware, async (req, res) => {
+  try {
+    const { title, description,status } = req.body;
+    const newTask = new Task({
+      title,
+      description,
+      status,
+      userId: req.user.id
+    });
+    const task = await newTask.save();
+    res.json(task);
+  } catch (err) {
+    res.status(500).send('Server error');
+  }
 });
 
-// Delete a task
-router.delete('/:id', async (req, res) => {
-  await Task.findByIdAndDelete(req.params.id);
-  res.status(204).send();
+// Update task
+router.put('/:id', authMiddleware, async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    if (task.userId.toString() !== req.user.id) {
+      return res.status(401).json({ msg: 'User not authorized' });
+    }
+    const { title, description ,status} = req.body;
+    task.title = title;
+    task.description = description;
+    task.status = status;
+    await task.save();
+    res.json(task);
+  } catch (err) {
+    res.status(500).send('Server error');
+  }
 });
+
+// Delete task
+router.delete('/:id', authMiddleware, async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    if (!task) {
+      return res.status(404).json({ msg: 'Task not found' });
+    }
+
+    // console.log("Task is", typeof(task), task.userId);
+
+    if (task.userId.toString() !== req.user._id.toString()) {
+      console.log("User not authorized to delete this task");
+      return res.status(401).json({ msg: 'User not authorized' });
+    }
+
+    await Task.findByIdAndDelete(task._id.toString());
+    res.json({ msg: 'Task removed' });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Server error');
+  }
+});
+
 
 module.exports = router;

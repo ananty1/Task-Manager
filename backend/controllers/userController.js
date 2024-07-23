@@ -6,7 +6,7 @@ const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.Google_client_ID);
 
 const generateToken = (id) => {
-    return jwt.sign({ id }, 'your_jwt_secret', {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
         expiresIn: '30d',
     });
 };

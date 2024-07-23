@@ -19,8 +19,8 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    googleId:{
-        type:String,
+    googleId: {
+        type: String,
     }
 });
 
@@ -37,6 +37,11 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
 
-const User = mongoose.model('User', userSchema);
+let User;
+try {
+    User = mongoose.model('User');
+} catch (error) {
+    User = mongoose.model('User', userSchema);
+}
 
 module.exports = User;

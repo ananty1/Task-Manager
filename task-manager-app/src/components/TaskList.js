@@ -4,7 +4,7 @@ import TaskColumn from './TaskColumn';
 import { getTasks, createTask, updateTask, deleteTask } from '../utils/taskService.js';
 import './TaskList.css';
 import { useNavigate } from 'react-router-dom';
-
+import { toast } from 'react-toastify';
 const TaskList = () => {
   const [tasklist, setTaskList] = useState({
     "Pending": [],
@@ -16,16 +16,28 @@ const TaskList = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const tasks = await getTasks();
-      const categorizedTasks = tasks.reduce((acc, task) => {
-        acc[task.status].push(task);
-        return acc;
-      }, { "Pending": [], "InProgress": [], "Completed": [] });
-      setTaskList(categorizedTasks);
+      try {
+        const tasks = await getTasks();
+        console.log("Received tasks:", tasks);
+        const categorizedTasks = tasks.reduce((acc, task) => {
+          if (task.status in acc) {
+            acc[task.status].push(task);
+          } else {
+            console.warn(`Unexpected task status: ${task.status}`);
+          }
+          return acc;
+        }, { "Pending": [], "InProgress": [], "Completed": [] });
+        console.log("Categorized tasks:", categorizedTasks);
+        setTaskList(categorizedTasks);
+      } catch (error) {
+        console.error("Failed to fetch tasks:", error);
+        toast.error('Failed to fetch tasks: ' + error.message);
+      }
     };
 
     fetchTasks();
   }, []);
+
 
   const handleOnDrag = (e, id, column_name) => {
     e.dataTransfer.setData("id", id);
@@ -75,7 +87,7 @@ const TaskList = () => {
     await updateTask(updatedTask._id, updatedTask);
     const updatedTaskList = { ...tasklist };
     Object.keys(updatedTaskList).forEach(column => {
-      updatedTaskList[column] = updatedTaskList[column].map(task => 
+      updatedTaskList[column] = updatedTaskList[column].map(task =>
         task._id === updatedTask._id ? updatedTask : task
       );
     });
@@ -85,14 +97,13 @@ const TaskList = () => {
   const handleDelete = async (id) => {
     try {
       await deleteTask(id);
-      
-    await deleteTask(id);
-    const updatedTaskList = { ...tasklist };
-    Object.keys(updatedTaskList).forEach(column => {
-      updatedTaskList[column] = updatedTaskList[column].filter(task => task._id !== id);
-    });
-    setTaskList(updatedTaskList);
-    
+
+      const updatedTaskList = { ...tasklist };
+      Object.keys(updatedTaskList).forEach(column => {
+        updatedTaskList[column] = updatedTaskList[column].filter(task => task._id !== id);
+      });
+      setTaskList(updatedTaskList);
+
     } catch (error) {
       console.error('Failed to delete task:', error);
       // Display error to the user (e.g., using a toast notification)
@@ -106,7 +117,7 @@ const TaskList = () => {
       </div>
       <div className='search-bar'>
         <div>
-          <strong>Search: </strong><input/>
+          <strong>Search: </strong><input />
         </div>
         <div>
           <strong>Sort By: <select> Recent</select></strong>
