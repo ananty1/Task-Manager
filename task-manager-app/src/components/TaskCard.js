@@ -4,7 +4,7 @@ import './TaskCard.css';
 import EditTask from './EditTask';
 import ViewDetail from './ViewDetail';
 
-const TaskCard = ({ id, status, task, handleOnDrag, handleOnReorder, handleSave }) => {
+const TaskCard = ({ id, status, task, handleOnDrag, handleOnReorder, handleSave ,handleDelete}) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isViewDetailsModalOpen, setIsViewDetailsModalOpen] = useState(false);
 
@@ -30,9 +30,9 @@ const TaskCard = ({ id, status, task, handleOnDrag, handleOnReorder, handleSave 
     >
       <h3>{task.title}</h3>
       <p>{task.description}</p>
-      <p> Created on </p>
+      <p> Created on {task.createdDate}</p>
       <div className='buttons'>
-        <button className='delete'>Delete</button>
+        <button className='delete' onClick={() => handleDelete(task._id)}>Delete</button>
         <button className='edit' onClick={() => setIsEditModalOpen(true)}>Edit</button>
         <button className='edit' onClick={() => setIsViewDetailsModalOpen(true)}>View Details</button>
       </div>

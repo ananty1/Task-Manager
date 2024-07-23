@@ -82,6 +82,23 @@ const TaskList = () => {
     setTaskList(updatedTaskList);
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await deleteTask(id);
+      
+    await deleteTask(id);
+    const updatedTaskList = { ...tasklist };
+    Object.keys(updatedTaskList).forEach(column => {
+      updatedTaskList[column] = updatedTaskList[column].filter(task => task._id !== id);
+    });
+    setTaskList(updatedTaskList);
+    
+    } catch (error) {
+      console.error('Failed to delete task:', error);
+      // Display error to the user (e.g., using a toast notification)
+    }
+  };
+
   return (
     <div className='task-page'>
       <div className='add-task'>
@@ -106,6 +123,7 @@ const TaskList = () => {
             handleOnDragOver={handleOnDragOver}
             handleOnReorder={handleOnReorder}
             handleSave={handleSave}
+            handleDelete={handleDelete}
           />
         ))}
       </div>

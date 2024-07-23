@@ -3,7 +3,7 @@ import React from 'react';
 import TaskCard from './TaskCard';
 import './TaskColumn.css';
 
-const TaskColumn = ({ tasks, status, handleOnDrag, handleOnDrop, handleOnDragOver, handleOnReorder, handleSave }) => {
+const TaskColumn = ({ tasks, status, handleOnDrag, handleOnDrop, handleOnDragOver, handleOnReorder, handleSave,handleDelete }) => {
   return (
     <div
       className="task-column"
@@ -22,6 +22,7 @@ const TaskColumn = ({ tasks, status, handleOnDrag, handleOnDrop, handleOnDragOve
           handleOnDrag={handleOnDrag}
           handleOnReorder={handleOnReorder}
           handleSave={handleSave}
+          handleDelete={handleDelete}
         />
       ))}
     </div>

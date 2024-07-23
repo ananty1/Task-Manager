@@ -11,12 +11,10 @@ import { loginUser, signupUser,googleLoginUser } from './utils/api';
 import { removeToken, saveToken, getToken } from './utils/auth';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import AddTaskForm from './components/AddTaskForm';
+import PrivateRoute from './utils/PrivateRoute';
+import PublicRoute from './utils/PublicRoute';
 
 
-const PrivateRoute = ({ element, isAuthenticated }) => {
-  const token =getToken()
-  return token ? element : <Navigate to="/login" />;
-};
 
 const AppContent = ({ isLoggedIn, setIsLoggedIn }) => {
   const navigate = useNavigate();
@@ -75,13 +73,11 @@ const AppContent = ({ isLoggedIn, setIsLoggedIn }) => {
       <ToastContainer />
       <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
       <Routes>
-        <Route path="/login" element={<Login onLogin={handleLogin} onGoogleLogin={handleGoogleLogin} />} />
-        <Route path="/signup" element={<Signup onSignup={handleSignup} />} />
-        <Route path="/tasks" element={<PrivateRoute element={<TaskList />} isAuthenticated={isLoggedIn} />} />
-        <Route path="/create-task" element={<PrivateRoute element={<AddTaskForm />} isAuthenticated={isLoggedIn} />} />
-        <Route path="/" element={<Login onLogin={handleLogin} onGoogleLogin={handleGoogleLogin} />} />
-
-        {/* <Route path="/" element={<Login onLogin={handleLogin} />} /> */}
+        <Route path="/login" element={<PublicRoute element={<Login onLogin={handleLogin} onGoogleLogin={handleGoogleLogin} />} />} />
+        <Route path="/signup" element={<PublicRoute element={<Signup onSignup={handleSignup} />} />} />
+        <Route path="/tasks" element={<PrivateRoute element={<TaskList />} />} />
+        <Route path="/create-task" element={<PrivateRoute element={<AddTaskForm />} />} />
+        <Route path="/" element={<PublicRoute element={<Login onLogin={handleLogin} onGoogleLogin={handleGoogleLogin} />} />} />
       </Routes>
     </>
   );
