@@ -1,6 +1,6 @@
 // src/middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
-const User = require('../models/user'); // Ensure this path is correct
+const User = require('../models/User'); // Ensure this path is correct
 
 const authMiddleware = async (req, res, next) => {
     const token = req.header('Authorization').replace('Bearer ', '');
